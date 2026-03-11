@@ -302,7 +302,10 @@ export default function Page() {
 
       {/* CHANGELOG - no clear button */}
       {tab==="changelog"&&<div>
-        <h2 style={{fontSize:13,fontWeight:700,color:"#cbd5e1",marginBottom:12}}>变更记录 / Changelog</h2>
+       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+  <h2 style={{fontSize:13,fontWeight:700,color:"#cbd5e1",margin:0}}>变更记录 / Changelog</h2>
+  {user==="Admin"&&logs.length>0&&<button onClick={async()=>{if(!confirm("确认清空所有记录？/ Clear all logs?"))return;const{error}=await supabase.from("changelog").delete().neq("id",0);if(!error){setLogs([]);flash("已清空 Cleared ✓")}}} style={{background:"none",border:"1px solid rgba(239,68,68,0.3)",borderRadius:5,color:"#f87171",padding:"2px 8px",cursor:"pointer",fontSize:10,fontFamily:"inherit"}}>清空全部 / Clear All</button>}
+</div>
         {logs.length===0?<div style={{textAlign:"center",padding:36,color:"#475569"}}><div style={{fontSize:26,marginBottom:6}}>◷</div>暂无记录 / No changes yet</div>
         :<div style={{position:"relative",paddingLeft:12}}>
           <div style={{position:"absolute",left:4,top:0,bottom:0,width:1.5,background:"rgba(99,102,241,0.12)"}}/>
@@ -311,7 +314,10 @@ export default function Page() {
             <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:7,padding:"7px 10px"}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:2}}>
                 <span style={{fontSize:11.5,fontWeight:700,color:c}}>{l.username}</span>
-                <span style={{fontSize:9.5,color:"#475569",fontFamily:"'JetBrains Mono',monospace"}}>{fmtTime(l.created_at)}</span>
+               <div style={{display:"flex",alignItems:"center",gap:5}}>
+  <span style={{fontSize:9.5,color:"#475569",fontFamily:"'JetBrains Mono',monospace"}}>{fmtTime(l.created_at)}</span>
+  {user==="Admin"&&<button onClick={async()=>{const{error}=await supabase.from("changelog").delete().eq("id",l.id);if(!error){setLogs(prev=>prev.filter(x=>x.id!==l.id));flash("已删除 Deleted ✓")}}} style={{background:"none",border:"none",color:"#475569",cursor:"pointer",fontSize:11,padding:"0 2px",opacity:.4}} onMouseOver={e=>{e.currentTarget.style.opacity=1;e.currentTarget.style.color="#ef4444"}} onMouseOut={e=>{e.currentTarget.style.opacity=.4;e.currentTarget.style.color="#475569"}}>✕</button>}
+</div>
               </div>
               <div style={{fontSize:11.5,color:"#94a3b8"}}>{l.action}</div>
             </div>
