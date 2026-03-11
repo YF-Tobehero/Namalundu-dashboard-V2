@@ -114,21 +114,36 @@ export default function Page() {
   };
   const Add=({onClick,label})=><button onClick={onClick} style={{background:"rgba(99,102,241,0.1)",border:"1px dashed rgba(99,102,241,0.3)",borderRadius:8,padding:mob?"10px 14px":"7px 14px",color:"#818cf8",cursor:"pointer",fontSize:mob?13:11,fontWeight:600,width:"100%",marginTop:7,fontFamily:"inherit"}}>+ {label}</button>;
   const Del=({onClick})=><button onClick={e=>{e.stopPropagation();onClick()}} title="删除 / Delete" style={{background:"none",border:"none",color:"#94a3b8",cursor:"pointer",fontSize:mob?16:13,padding:mob?"4px 6px":"0 3px",opacity:.5}} onMouseOver={e=>{e.currentTarget.style.opacity=1;e.currentTarget.style.color="#ef4444"}} onMouseOut={e=>{e.currentTarget.style.opacity=.5;e.currentTarget.style.color="#94a3b8"}}>✕</button>;
-
-  const BCard=({item,lk})=>{const sv=SEV[item.severity];return<div style={{background:sv.bg,border:`1px solid ${sv.border}22`,borderLeft:`4px solid ${sv.border}`,borderRadius:10,padding:mob?"12px 12px":"11px 13px",marginBottom:mob?10:7}}>
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:6,flexWrap:"wrap",gap:6}}>
-      <div style={{display:"flex",alignItems:"center",gap:6,flex:1,minWidth:0}}>
-        <span style={{width:7,height:7,borderRadius:"50%",background:sv.dot,flexShrink:0}}/>
-        <span style={{fontWeight:700,color:sv.text,fontSize:mob?14:13,wordBreak:"break-word"}}><EC value={item.title} ck={`${item.id}-t`} onC={v=>sBF(lk,item.id,"title",v,`编辑 Edited: ${v.slice(0,20)}`)}/></span>
-      </div>
-      <div style={{display:"flex",gap:5,alignItems:"center",flexWrap:"wrap"}}>
-        <select value={item.severity} onChange={e=>sBF(lk,item.id,"severity",e.target.value,`优先级 Severity: ${item.title.slice(0,12)} → ${e.target.value}`)} style={{fontSize:mob?13:10,padding:mob?"4px 6px":"2px 3px",borderRadius:4,border:`1px solid ${sv.border}44`,background:"white",cursor:"pointer"}}><option value="fatal">致命 / Fatal</option><option value="high">高 / High</option><option value="medium">中 / Medium</option></select>
-        <select value={item.status} onChange={e=>sBF(lk,item.id,"status",e.target.value,`状态 Status: ${item.title.slice(0,12)} → ${e.target.value.split("/")[0].trim()}`)} style={{fontSize:mob?13:10,padding:mob?"4px 6px":"2px 3px",borderRadius:4,border:`1px solid ${sv.border}44`,background:"white",cursor:"pointer"}}>{STS.map(o=><option key={o} value={o}>{o}</option>)}</select>
+const BCard=({item,lk})=>{const sv=SEV[item.severity];return<div style={{background:sv.bg,border:`1px solid ${sv.border}22`,borderLeft:`4px solid ${sv.border}`,borderRadius:10,padding:mob?"12px 12px":"11px 13px",marginBottom:mob?10:7}}>
+    {mob?<>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+        <div style={{display:"flex",gap:5,alignItems:"center",flexWrap:"wrap"}}>
+          <select value={item.severity} onChange={e=>sBF(lk,item.id,"severity",e.target.value,`优先级 Severity: ${item.title.slice(0,12)} → ${e.target.value}`)} style={{fontSize:13,padding:"4px 6px",borderRadius:4,border:`1px solid ${sv.border}44`,background:"white",cursor:"pointer"}}><option value="fatal">致命 / Fatal</option><option value="high">高 / High</option><option value="medium">中 / Medium</option></select>
+          <select value={item.status} onChange={e=>sBF(lk,item.id,"status",e.target.value,`状态 Status: ${item.title.slice(0,12)} → ${e.target.value.split("/")[0].trim()}`)} style={{fontSize:13,padding:"4px 6px",borderRadius:4,border:`1px solid ${sv.border}44`,background:"white",cursor:"pointer"}}>{STS.map(o=><option key={o} value={o}>{o}</option>)}</select>
+        </div>
         <Del onClick={()=>rmB(lk,item.id,item.title)}/>
       </div>
-    </div>
-    <div style={{color:sv.text,fontSize:mob?13:12,opacity:.85,paddingLeft:13}}><EC value={item.reason} ck={`${item.id}-r`} onC={v=>sBF(lk,item.id,"reason",v,`原因 Reason: ${item.title.slice(0,12)}`)}/></div>
+      <div style={{display:"flex",alignItems:"flex-start",gap:6,marginBottom:6}}>
+        <span style={{width:7,height:7,borderRadius:"50%",background:sv.dot,flexShrink:0,marginTop:5}}/>
+        <span style={{fontWeight:700,color:sv.text,fontSize:14}}><EC value={item.title} ck={`${item.id}-t`} onC={v=>sBF(lk,item.id,"title",v,`编辑 Edited: ${v.slice(0,20)}`)}/></span>
+      </div>
+      <div style={{color:sv.text,fontSize:13,opacity:.85,paddingLeft:13}}><EC value={item.reason} ck={`${item.id}-r`} onC={v=>sBF(lk,item.id,"reason",v,`原因 Reason: ${item.title.slice(0,12)}`)}/></div>
+    </>:<>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4,flexWrap:"wrap",gap:5}}>
+        <div style={{display:"flex",alignItems:"center",gap:6,flex:1,minWidth:150}}>
+          <span style={{width:7,height:7,borderRadius:"50%",background:sv.dot,flexShrink:0}}/>
+          <span style={{fontWeight:700,color:sv.text,fontSize:13}}><EC value={item.title} ck={`${item.id}-t`} onC={v=>sBF(lk,item.id,"title",v,`编辑 Edited: ${v.slice(0,20)}`)}/></span>
+        </div>
+        <div style={{display:"flex",gap:4,alignItems:"center"}}>
+          <select value={item.severity} onChange={e=>sBF(lk,item.id,"severity",e.target.value,`优先级 Severity: ${item.title.slice(0,12)} → ${e.target.value}`)} style={{fontSize:10,padding:"2px 3px",borderRadius:4,border:`1px solid ${sv.border}44`,background:"white",cursor:"pointer"}}><option value="fatal">致命 / Fatal</option><option value="high">高 / High</option><option value="medium">中 / Medium</option></select>
+          <select value={item.status} onChange={e=>sBF(lk,item.id,"status",e.target.value,`状态 Status: ${item.title.slice(0,12)} → ${e.target.value.split("/")[0].trim()}`)} style={{fontSize:10,padding:"2px 3px",borderRadius:4,border:`1px solid ${sv.border}44`,background:"white",cursor:"pointer"}}>{STS.map(o=><option key={o} value={o}>{o}</option>)}</select>
+          <Del onClick={()=>rmB(lk,item.id,item.title)}/>
+        </div>
+      </div>
+      <div style={{color:sv.text,fontSize:12,opacity:.85,paddingLeft:13}}><EC value={item.reason} ck={`${item.id}-r`} onC={v=>sBF(lk,item.id,"reason",v,`原因 Reason: ${item.title.slice(0,12)}`)}/></div>
+    </>}
   </div>};
+  
 
   // Loading
   if(loading)return<div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"#0f172a",color:"#818cf8",fontFamily:"Inter,sans-serif"}}><div style={{textAlign:"center"}}><div style={{fontSize:32,marginBottom:12,animation:"pulse 1.5s infinite"}}>◈</div>加载中 Loading...<style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}`}</style></div></div>;
